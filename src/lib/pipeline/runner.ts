@@ -10,6 +10,7 @@ import {
   critiqueJuneOnMarcus,
   critiqueMarcusOnImani,
   cultureResearch,
+  facebookListNote,
   financeBody,
   lockLine,
   performanceFeedback,
@@ -204,7 +205,11 @@ async function trendStep(store: StudioStore, job: JobRecord): Promise<StepOutcom
     agent: agentById("trend-scout"),
     purpose: "research.trend",
     fallbackText: fallback,
-    user: promptFor("trend-scout", "Scout the brief. Name the platform, the repeatable moment, and the posting windows. Do not score virality.", summaryOf(ctx)),
+    user: promptFor(
+      "trend-scout",
+      "Scout the brief. Name the platform, the money moment, and the posting windows. Carry the format references labeled references only. Do not score virality.",
+      summaryOf(ctx),
+    ),
   });
   await say(store, job, "trend-scout", "research", withNote(result.text, result));
   return {};
@@ -217,7 +222,11 @@ async function cultureStep(store: StudioStore, job: JobRecord): Promise<StepOutc
     agent: agentById("culture-desk"),
     purpose: "research.culture",
     fallbackText: fallback,
-    user: promptFor("culture-desk", "Preliminary sensitivity read. Do not sign off yet. Flag stereotypes. Keep people specific.", summaryOf(ctx)),
+    user: promptFor(
+      "culture-desk",
+      "Preliminary sensitivity read. State what we're not. Do not sign off yet. Flag stereotypes and degrading portrayals. Keep one specific person.",
+      summaryOf(ctx),
+    ),
   });
   const body = withNote(result.text, result);
   await say(store, job, "culture-desk", "research", body);
@@ -297,7 +306,7 @@ async function lockStep(store: StudioStore, job: JobRecord): Promise<StepOutcome
       title: job.title,
       winner: tally.winner,
       voteTally: tally.summary,
-      logline: `${ctx.cast.name}, a ${ctx.cast.role} in ${ctx.cast.city}, hits "${ctx.hookText}" before the half-second, then one sourced money sentence.`,
+      logline: `${ctx.cast.name}, a ${ctx.cast.role} in ${ctx.cast.city}, opens on "${ctx.hookText}" with ${ctx.sceneDollar} on screen, then one sourced money sentence. Comment ${ctx.commentKeyword}.`,
       hookText: ctx.hookText,
       hookDurationMs: 420,
       openingBeat: "pain_point",
@@ -347,9 +356,11 @@ async function bibleStep(store: StudioStore, job: JobRecord): Promise<StepOutcom
         time: "a weekday morning, before the platform's posting window",
         texture: ctx.cast.visual,
         rules: [
-          "One person, one document.",
-          "Scene numbers are hypothetical.",
+          "One recurring character, one document.",
+          "What we're not: a stereotyped or degrading AI portrayal.",
+          `${ctx.sceneDollar} on the paper is hypothetical.`,
           "The sourced sentence stays sourced.",
+          `End by asking them to comment ${ctx.commentKeyword}.`,
           ...ctx.cast.avoid.map((item) => `Do not: ${item}`),
         ],
       },
@@ -368,7 +379,7 @@ async function shotStep(store: StudioStore, job: JobRecord): Promise<StepOutcome
     {
       id: "s1",
       secondIn: 0,
-      durationSec: 1.2,
+      durationSec: 2,
       visual: ctx.cast.visual,
       audio: "room tone, no needle-drop",
       onScreenText: ctx.hookText,
@@ -376,17 +387,17 @@ async function shotStep(store: StudioStore, job: JobRecord): Promise<StepOutcome
     },
     {
       id: "s2",
-      secondIn: 1.2,
-      durationSec: 3,
+      secondIn: 2,
+      durationSec: 8,
       visual: `${ctx.cast.name}'s hands on their own paper`,
       audio: ctx.pain,
-      onScreenText: "",
+      onScreenText: ctx.sceneDollar,
       purpose: "pain",
     },
     {
       id: "s3",
-      secondIn: 4.2,
-      durationSec: 4.5,
+      secondIn: 10,
+      durationSec: 10,
       visual: "the sourced sentence set in type, with the publisher name",
       audio: ctx.fact.claim,
       onScreenText: "Source on screen",
@@ -394,15 +405,21 @@ async function shotStep(store: StudioStore, job: JobRecord): Promise<StepOutcome
     },
     {
       id: "s4",
-      secondIn: 8.7,
-      durationSec: 2.8,
+      secondIn: 20,
+      durationSec: 8,
       visual: `${ctx.cast.name} looks just off camera`,
       audio: ctx.action,
-      onScreenText: "",
+      onScreenText: `Comment ${ctx.commentKeyword}`,
       purpose: "ask",
     },
   ];
-  await say(store, job, "showrunner", "note", `Shot pack locked. Hook frame at 420ms. Caption stays two lines. ${ctx.caption.replaceAll("\n", " / ")}`);
+  await say(
+    store,
+    job,
+    "showrunner",
+    "note",
+    `Shot pack locked at ${ctx.durationSeconds}s. Hook is the first line, frame at 420ms, ${ctx.sceneDollar} on screen. Caption stays two lines. ${ctx.caption.replaceAll("\n", " / ")}`,
+  );
   await store.addArtifact({
     jobId: job.id,
     stage: "shot_pack",
@@ -410,8 +427,12 @@ async function shotStep(store: StudioStore, job: JobRecord): Promise<StepOutcome
     revision: job.revision,
     payload: {
       shots,
+      durationSeconds: ctx.durationSeconds,
       hookDurationMs: 420,
       openingBeat: "pain_point",
+      onScreenText: ctx.onScreenText,
+      recurringCharacter: ctx.cast.name,
+      commentKeyword: ctx.commentKeyword,
       caption: ctx.caption,
     },
   });
@@ -473,7 +494,7 @@ async function editStep(store: StudioStore, job: JobRecord): Promise<StepOutcome
     kind: "edit",
     revision: job.revision,
     payload: {
-      timeline: "s1 hook 0.0–1.2 · s2 pain · s3 sourced line · s4 ask",
+      timeline: `${ctx.durationSeconds}s · s1 hook 0.0–2.0 · s2 dollar on screen · s3 sourced line · s4 comment ${ctx.commentKeyword}`,
       caption: ctx.caption,
       audioLicense: "original",
       mediaOriginal: true,
@@ -616,7 +637,7 @@ async function socialStep(store: StudioStore, job: JobRecord): Promise<StepOutco
     scheduledAtUtc: payload?.scheduledAtUtc ?? "",
     detail: receipt.detail,
   });
-  await say(store, job, "showrunner", "note", `Social webhook: ${receipt.status}. ${receipt.detail}`);
+  await say(store, job, "showrunner", "note", `Social webhook: ${receipt.status}. ${receipt.detail} ${facebookListNote()}`);
   return {};
 }
 
@@ -684,8 +705,12 @@ function summaryOf(ctx: BriefContext): string {
     `Type: ${ctx.videoTypeLabel}. Platform: ${ctx.platformLabel}.`,
     `Themes: ${ctx.themes.join(", ") || "none"}.`,
     `Must clear viral gate: ${ctx.mustGoViral ? "yes" : "no"}.`,
-    `Character: ${ctx.cast.name}, ${ctx.cast.role}, ${ctx.cast.city}.`,
-    `Hook: ${ctx.hookText}`,
+    `One recurring character: ${ctx.cast.name}, ${ctx.cast.role}, ${ctx.cast.city}.`,
+    `Money moment: ${ctx.moneyMoment}.`,
+    `Hook, and the first line: ${ctx.hookText}`,
+    `Dollar on screen (scene hypothetical): ${ctx.sceneDollar}`,
+    `Comment keyword: ${ctx.commentKeyword}`,
+    `Runtime target: ${ctx.durationSeconds}s inside 15–45s.`,
     `Pain: ${ctx.pain}`,
     `Goal: ${ctx.goal}`,
   ].join("\n");

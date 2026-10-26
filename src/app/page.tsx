@@ -9,14 +9,14 @@ import { cn } from "cn";
 
 const DESKS = [
   ["Intake", "The brief lands: type, goal, platform, topic, and whether it must clear the gate."],
-  ["Research", "Trend Scout plus Culture Desk. Accuracy, sensitivity, stereotype checks."],
+  ["Research", "Trend Scout carries format references, labeled references only. Culture Desk holds what we're not: no stereotyped or degrading AI portrayals of Black people."],
   ["Writers' Room", "Three writers pitch, critique, and vote. The showrunner locks one concept."],
   ["Bible", "Character and world get locked so later desks cannot drift the portrayal."],
-  ["Shot pack", "Hook timed, pain first, caption held to two lines."],
+  ["Shot pack", "Hard first line, a dollar on screen, one character, 15–45s, then a comment keyword."],
   ["Generation", "Grok Imagine and Higgsfield adapters. Both are stubs until their APIs are known."],
   ["Edit", "Schedule lands on 9:00 AM or 6:00 PM CT. Audio is original."],
   ["QC / GO", "Finance Fact-Checker wants a source on every money claim. QC runs the gate."],
-  ["Distribution", "Muse stub, then an optional social webhook. Nothing is promised to travel."],
+  ["Distribution", "Muse stub, an optional social webhook, and a Facebook list that stays on the floor."],
   ["Performance", "Simulated numbers, clearly labeled, loop back to Research for the next brief."],
 ];
 

@@ -4,6 +4,7 @@ import { useFloor } from "@/components/floor-provider";
 import { FloorState, PageHeader } from "@/components/studio-bits";
 import { GROK_IMAGINE_TODO, HIGGSFIELD_TODO } from "@/lib/adapters/generation";
 import { MUSE_TODO } from "@/lib/adapters/distribution";
+import { FORMAT_REFERENCES, FORMAT_REFERENCES_NOTE } from "@/lib/house";
 
 const MACHINES = [
   { name: "Grok Imagine", status: "Stub", note: GROK_IMAGINE_TODO },
@@ -54,6 +55,16 @@ export default function AgentsPage() {
           );
         })}
       </div>
+      <h2 className="mt-10 font-heading text-2xl">Trend Scout references</h2>
+      <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">{FORMAT_REFERENCES_NOTE}</p>
+      <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+        {FORMAT_REFERENCES.map((name) => (
+          <li key={name} className="rounded-xl bg-card px-4 py-3 text-sm ring-1 ring-foreground/10">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-primary">References only</span>
+            <p className="mt-1">{name}</p>
+          </li>
+        ))}
+      </ul>
       <h2 className="mt-10 font-heading text-2xl">Machines</h2>
       <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
         Generation and Muse are adapter interfaces. They record intent and do not call a network until the contract exists.

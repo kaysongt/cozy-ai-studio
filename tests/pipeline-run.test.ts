@@ -60,9 +60,22 @@ describe("mock floor", () => {
     expect(qc[0]?.score).toBe(100);
     expect(qc[0]?.disclaimer.toLowerCase()).toContain("not a guarantee of virality");
 
+    const trend = debate.find((entry) => entry.agentName === "Amina Diallo");
+    expect(trend?.body).toContain("References only");
+    expect(trend?.body).toContain("Ogun Studios viral AI drama case study");
+    expect(trend?.body).toContain("Rich & Regular");
+    expect(trend?.body).toContain("Budgetnista");
+    expect(trend?.body).toContain("Rahkim Sabree");
+    expect(trend?.body).toContain("Journey to Launch");
+    const culture = debate.find((entry) => entry.agentName === "Ruthie Bennett");
+    expect(culture?.body).toContain("What we're not");
+    expect(culture?.body.toLowerCase()).toContain("stereotyped or degrading");
+    expect(debate.some((entry) => entry.body.includes("Meta Elevate HQ") && entry.body.includes("does not post"))).toBe(true);
+
     const distributions = await store.listDistributionsForJob(job.id);
     expect(distributions.map((row) => row.channel).sort()).toEqual(["muse", "social"]);
     expect(distributions.find((row) => row.channel === "muse")?.stub).toBe(true);
+    expect(distributions.some((row) => row.channel === "facebook")).toBe(false);
 
     const performance = await store.listPerformanceForJob(job.id);
     expect(performance[0]?.simulated).toBe(true);

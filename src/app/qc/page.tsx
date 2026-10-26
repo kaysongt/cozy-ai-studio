@@ -16,7 +16,7 @@ export default function QcPage() {
       <PageHeader
         kicker="QC / GO"
         title="The gate, not a forecast."
-        lede="Six checks, then a decision. A must-go-viral miss goes back to the writers’ room. A brief that did not have to go viral can ship conditional. Neither outcome means the post will travel."
+        lede="The checklist, then a decision. A hard first line, a dollar on screen, one character, a comment keyword, and 15–45 seconds sit beside the original gate. A must-go-viral miss goes back to the writers’ room. A brief that did not have to go viral can ship conditional. Neither outcome means the post will travel."
       />
       <FloorState booting={booting} error={error} />
       <p className="mb-4 max-w-3xl rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm leading-6">{VIRAL_DISCLAIMER}</p>

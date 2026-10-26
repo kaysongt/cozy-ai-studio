@@ -1,6 +1,8 @@
 import { platformLabel, videoTypeLabel } from "@/lib/catalog";
 import type { FactClaim, ViralPackage } from "@/lib/viral/gate";
 
+export const RUNTIME_SECONDS = 28;
+
 export interface CastMember {
   name: string;
   age: number;
@@ -120,6 +122,11 @@ export interface BriefContext extends BriefFields {
   pain: string;
   action: string;
   caption: string;
+  sceneDollar: string;
+  commentKeyword: string;
+  moneyMoment: string;
+  durationSeconds: number;
+  onScreenText: string;
   tags: string[];
   fact: FactClaim;
   hypothetical: FactClaim;
@@ -159,7 +166,7 @@ export function makeContext(brief: BriefFields, feedback: string[]): BriefContex
   const cast = castFor(brief.topic, brief.themes);
   const lines = hookFor(brief.topic, cast);
   const tags = tagsFor(brief.themes, brief.platform, brief.topic);
-  const caption = `${lines.pain}\n${lines.action} ${tags.join(" ")}`.trim();
+  const caption = `${lines.pain}\n${lines.action} Comment ${lines.commentKeyword}. ${tags.join(" ")}`.trim();
   const first = cast.name.split(" ")[0] ?? cast.name;
   return {
     ...brief,
@@ -170,10 +177,15 @@ export function makeContext(brief: BriefFields, feedback: string[]): BriefContex
     pain: lines.pain,
     action: lines.action,
     caption,
+    sceneDollar: lines.sceneDollar,
+    commentKeyword: lines.commentKeyword,
+    moneyMoment: lines.moneyMoment,
+    durationSeconds: RUNTIME_SECONDS,
+    onScreenText: lines.hookText,
     tags,
     fact: financeFact(brief.topic),
     hypothetical: {
-      claim: `${cast.name}'s scene uses a figure on their own paperwork. It is a hypothetical for the story, not a national statistic.`,
+      claim: `${cast.name}'s paper shows ${lines.sceneDollar}. It is a hypothetical for the story, not a national statistic.`,
       source: null,
       kind: "hypothetical",
     },
@@ -205,34 +217,60 @@ function financeFact(topic: string): FactClaim {
   return CREDIT_FACT;
 }
 
-function hookFor(topic: string, cast: CastMember): { hookText: string; pain: string; action: string } {
+interface StoryShape {
+  hookText: string;
+  pain: string;
+  action: string;
+  sceneDollar: string;
+  commentKeyword: string;
+  moneyMoment: string;
+}
+
+function hookFor(topic: string, cast: CastMember): StoryShape {
   const hay = topic.toLowerCase();
   const first = cast.name.split(" ")[0] ?? cast.name;
+  const fromTopic = topic.match(/\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?|\$\d+(?:\.\d{2})?/)?.[0];
   if (/payday|rollover|cash advance/.test(hay)) {
+    const sceneDollar = fromTopic ?? "$375";
     return {
-      hookText: "Thursday is payday. Thursday is also the due date.",
+      hookText: `Thursday is payday. ${sceneDollar} is also due.`,
       pain: "The loan comes due on the same day the paycheck lands.",
       action: "Ask what a rollover costs before the next one.",
+      sceneDollar,
+      commentKeyword: "THURSDAY",
+      moneyMoment: "a debt reveal",
     };
   }
-  if (/closing|quoted|mortgage|homebuyer|loan estimate/.test(hay)) {
+  if (/closing|quoted|mortgage|homebuyer|loan estimate|first home/.test(hay)) {
+    const sceneDollar = fromTopic ?? "$4,200";
     return {
-      hookText: "They quoted one number. The paper says another.",
+      hookText: `They quoted one number. The paper says ${sceneDollar}.`,
       pain: "The payment quoted is not the cash due at the table.",
       action: "Ask which fees are lender charges before you sign.",
+      sceneDollar,
+      commentKeyword: "CLOSING",
+      moneyMoment: "a first home",
     };
   }
-  if (/emergency|band|trip|instrument/.test(hay)) {
+  if (/emergency|band|trip|instrument|secret/.test(hay)) {
+    const sceneDollar = fromTopic ?? "$180";
     return {
-      hookText: "The trip is due Friday. That envelope was not for a trip.",
+      hookText: `The trip wants ${sceneDollar}. That envelope was not for a trip.`,
       pain: "A school fee and an emergency fund are not the same pile of money.",
       action: "Name which bill can wait before you touch savings.",
+      sceneDollar,
+      commentKeyword: "ENVELOPE",
+      moneyMoment: "a family money secret",
     };
   }
+  const sceneDollar = fromTopic ?? "$240";
   return {
-    hookText: `${first} is already in it before the explainer starts.`,
+    hookText: `${sceneDollar} is already on ${first}'s paper.`,
     pain: `${first} is paying for this before anyone explains it.`,
     action: "Start with the part that already costs something.",
+    sceneDollar,
+    commentKeyword: "PAPER",
+    moneyMoment: "a money moment",
   };
 }
 
@@ -266,6 +304,11 @@ export function toViralPackage(
     hookDurationMs: 420,
     hookText: ctx.hookText,
     openingBeat: "pain_point",
+    firstLine: ctx.hookText,
+    onScreenText: ctx.onScreenText,
+    recurringCharacter: ctx.cast.name,
+    commentKeyword: ctx.commentKeyword,
+    durationSeconds: ctx.durationSeconds,
     caption: ctx.caption,
     portrayalRespectful: !blocked,
     stereotypeFlags: blocked ? ctx.flags : [],

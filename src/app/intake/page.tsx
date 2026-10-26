@@ -76,7 +76,7 @@ export default function IntakePage() {
       <PageHeader
         kicker="Intake"
         title="File the brief."
-        lede="House defaults are Black characters, Black issues, and finance. Turn any of them off. Any video type is allowed. “Must clear the gate” sends a miss back to the writers’ room. It does not mean the cut will travel."
+        lede="House defaults are Black characters, Black issues, and finance, shaped as a short money-moment drama: a hard first line, a dollar on screen, one recurring character, a comment keyword, about 15–45 seconds. Turn any theme off. Any video type is allowed. “Must clear the gate” sends a miss back to the writers’ room. It does not mean the cut will travel."
       />
       <form onSubmit={onSubmit} className="space-y-5 rounded-2xl bg-card px-4 py-5 ring-1 ring-foreground/10 md:px-6">
         <Field label="Working title" hint="Optional. The topic stands in if you leave this blank.">

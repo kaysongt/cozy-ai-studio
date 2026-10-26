@@ -23,14 +23,16 @@ export const ROSTER: AgentDef[] = [
     name: "Amina Diallo",
     role: "Trend Scout",
     provider: "grok",
-    mandate: "Finds the live conversation this brief can join: platform, timing, and the phrase people already repeat. Does not invent a trend score.",
+    mandate:
+      "Finds the live conversation this brief can join: platform, timing, and the phrase people already repeat. Carries format references labeled references only. Does not invent a trend score.",
   },
   {
     id: "culture-desk",
     name: "Ruthie Bennett",
     role: "Culture Desk",
     provider: "anthropic",
-    mandate: "Accuracy, sensitivity, and stereotype checks. Can refuse a portrayal. People stay specific: a job, a city, a document.",
+    mandate:
+      "What we're not: stereotyped or degrading AI portrayals of Black people. Accuracy, sensitivity, and stereotype checks. Can refuse a portrayal. People stay specific: a job, a city, a document.",
   },
   {
     id: "finance-checker",

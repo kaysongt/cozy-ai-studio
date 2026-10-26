@@ -32,14 +32,14 @@ The demo shares the dev server’s SQLite file. The first launch seeds three EXA
 ## The floor
 
 1. **Intake** — video type, goal, platform, topic, themes, must-clear-the-gate.
-2. **Research** — Trend Scout and Culture Desk (accuracy, sensitivity, stereotype checks).
+2. **Research** — Trend Scout (format references, labeled references only) and Culture Desk (accuracy, sensitivity, stereotype checks, and a “what we’re not” line against stereotyped or degrading AI portrayals of Black people).
 3. **Writers’ room** — three writers pitch, critique, and vote. The showrunner locks one concept. The transcript is signed with agent name and a Central Time timestamp.
 4. **Character / world bible** — Story Bible Keeper.
-5. **Shot pack** — hook timed to land by 500ms, pain first, caption shape.
+5. **Shot pack** — hook is the first line and lands by 500ms, a specific dollar figure on screen, one recurring character, 15–45s, pain first, caption ends with a comment keyword.
 6. **Generation** — Grok Imagine and Higgsfield adapter stubs. Nothing is rendered.
 7. **Edit** — original audio attestation, schedule at 9:00 AM or 6:00 PM CT.
 8. **QC / GO** — Finance Fact-Checker (a source on every money claim) and the viral-readiness gate.
-9. **Distribution** — Muse stub, then an optional social webhook.
+9. **Distribution** — Muse stub, then an optional social webhook. A Facebook list is saved and is not posted.
 10. **Performance** — simulated metrics, labeled as simulated, written back to Research for the next brief.
 
 A **must-go-viral** miss returns to the writers’ room (three times, then the brief is held for a person). A brief that is not must-go-viral can ship **conditional**. Neither path promises a hit.
@@ -47,11 +47,20 @@ A **must-go-viral** miss returns to the writers’ room (three times, then the b
 The gate checks:
 
 - hook lands within 0.5s
+- the hook is the first line, and it is a hard open
 - a relatable pain point is the first beat
+- a specific dollar figure is on screen
+- one recurring character
+- the caption ends with a comment keyword
+- runtime is 15–45 seconds
 - caption is 1–2 lines and at most 5 hashtags
 - facts are sourced and the portrayal is respectful (Culture Desk sign-off, no stereotype flags, every money claim has a source)
 - media is original and audio is CC0 or original
 - the post is scheduled for 9:00 AM or 6:00 PM CT exactly
+
+Default shape, when the brief keeps the house themes: an AI micro-drama with a Black lead on one money moment (a debt reveal, a family money secret, or a first home). Trend Scout’s format references — Ogun Studios viral AI drama case study, Rich & Regular, Budgetnista, Rahkim Sabree, Journey to Launch — are labeled **references only**. They are not sources and not a result the studio claims.
+
+The Facebook list (Meta Elevate HQ, Black Creatives in AI, DFW Black Owned Businesses, Support Black Owned Business, Black Business Owners Network) is shown on Distribution. The floor does not post into those groups.
 
 ## Desks and keys
 

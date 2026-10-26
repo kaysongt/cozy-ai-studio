@@ -1,5 +1,6 @@
 import { agentById, type AgentDef, type ProviderId } from "@/lib/agents/roster";
 import type { StudioStore } from "@/lib/db/repository";
+import { formatReferencesBlock, HOUSE_SHAPE, WHAT_WE_ARE_NOT } from "@/lib/house";
 import { monthKeyCt } from "@/lib/time";
 
 export interface ProviderConfig {
@@ -90,9 +91,10 @@ export function systemFor(agent: AgentDef): string {
     `You are ${agent.name}, ${agent.role} at Cozy AI Studio, the short-video floor for Cozy Digital.`,
     agent.mandate,
     "When the brief asks for them, default themes are specific Black characters, Black issues told as a price or a rule in one person's life, and finance.",
+    HOUSE_SHAPE,
+    WHAT_WE_ARE_NOT,
     "Any video type is allowed. Do not force a theme the brief removed.",
     "Never claim a video will go viral, is guaranteed to travel, or will hit a view count.",
-    "No stereotypes, no dialect as costume, no monolith standing in for a people.",
     "A money claim stated as fact needs a named source. Paperwork inside a scene is a hypothetical and must be labeled as one.",
     "Write plain sentences. Stay under 160 words unless asked for a caption.",
   ].join(" ");
@@ -250,5 +252,11 @@ function roundCost(value: number): number {
 
 export function promptFor(agentId: string, task: string, ctxSummary: string): string {
   const agent = agentById(agentId);
-  return `Task: ${task}\nDesk: ${agent.name}, ${agent.role}.\n\n${ctxSummary}\n\nReply with the desk note only. Do not claim guaranteed virality.`;
+  const extra =
+    agentId === "trend-scout"
+      ? `\n\n${formatReferencesBlock()}`
+      : agentId === "culture-desk"
+        ? `\n\n${WHAT_WE_ARE_NOT}`
+        : "";
+  return `Task: ${task}\nDesk: ${agent.name}, ${agent.role}.\n\n${ctxSummary}${extra}\n\nReply with the desk note only. Do not claim guaranteed virality.`;
 }

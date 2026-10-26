@@ -1,4 +1,5 @@
 import type { BriefContext } from "@/lib/floor/context";
+import { FACEBOOK_DISTRIBUTION_LIST, FACEBOOK_LIST_NOTE, formatReferencesBlock, WHAT_WE_ARE_NOT } from "@/lib/house";
 import type { ViralGateResult } from "@/lib/viral/gate";
 
 export function trendCopy(ctx: BriefContext): string {
@@ -6,25 +7,32 @@ export function trendCopy(ctx: BriefContext): string {
     ? `Performance left this for Research: ${ctx.feedback[0]}`
     : "No performance loop on file yet. Scouting cold.";
   return [
+    formatReferencesBlock(),
     `Platform is ${ctx.platformLabel}. The brief wants: ${ctx.goal}`,
-    `The repeatable moment is not a hashtag. It is the second someone sees the number change: "${ctx.hookText}"`,
+    `The shape to scout is an AI micro-drama on ${ctx.moneyMoment}: one recurring character (${ctx.cast.name}), a hard first line, ${ctx.sceneDollar} on screen, comment keyword ${ctx.commentKeyword}, about ${ctx.durationSeconds}s inside 15–45s.`,
+    `The repeatable moment is the second someone sees the number change: "${ctx.hookText}"`,
     "Posting windows that satisfy the gate are 9:00 AM CT and 6:00 PM CT. I will not invent a virality score.",
     feedback,
   ].join(" ");
 }
 
+export function facebookListNote(): string {
+  return `${FACEBOOK_LIST_NOTE} Groups: ${FACEBOOK_DISTRIBUTION_LIST.join("; ")}.`;
+}
+
 export function cultureResearch(ctx: BriefContext): string {
+  const guard = WHAT_WE_ARE_NOT;
   if (ctx.flags.length > 0 && ctx.revision === 0) {
-    return `Preliminary read, not a sign-off. The brief uses language I will not approve on screen (${ctx.flags.join("; ")}). The cut has to be a named person and a specific document. I will not read the raw wording into the room.`;
+    return `${guard} Preliminary read, not a sign-off. The brief uses language I will not approve on screen (${ctx.flags.join("; ")}). The cut has to be a named person and a specific document. I will not read the raw wording into the room.`;
   }
   if (ctx.flags.length > 0) {
-    return `Revision ${ctx.revision}. The original brief had language we are not filming (${ctx.flags.join("; ")}). This pass keeps ${ctx.cast.name}, ${ctx.cast.role} in ${ctx.cast.city}, and the paperwork. I am ready to sign if the locked cut stays there.`;
+    return `${guard} Revision ${ctx.revision}. The original brief had language we are not filming (${ctx.flags.join("; ")}). This pass keeps ${ctx.cast.name}, ${ctx.cast.role} in ${ctx.cast.city}, and the paperwork. I am ready to sign if the locked cut stays there.`;
   }
   const house = ctx.themes.includes("Black characters") || ctx.themes.includes("Black issues");
   const theme = house
-    ? `${ctx.cast.name} is a ${ctx.cast.role} in ${ctx.cast.city}, not a stand-in for a people. If the brief touches a Black issue, it is the price or the rule in front of them.`
+    ? `${ctx.cast.name} is a ${ctx.cast.role} in ${ctx.cast.city}, not a stand-in for a people. If the brief touches a Black issue, it is the price or the rule in front of them. The money moment is ${ctx.moneyMoment}.`
     : `The brief did not ask for the house themes. We will not invent an identity. ${ctx.cast.name} is a ${ctx.cast.role} in ${ctx.cast.city}.`;
-  return `Preliminary read. ${theme} Pain is situational. No dialect costume, no monolith, scene numbers labeled hypothetical. Sign-off waits for the locked cut.`;
+  return `${guard} Preliminary read. ${theme} Pain is situational. One recurring character. Scene figure ${ctx.sceneDollar} stays hypothetical. Sign-off waits for the locked cut.`;
 }
 
 export function showrunnerOpen(ctx: BriefContext): string {
@@ -38,8 +46,9 @@ export function showrunnerOpen(ctx: BriefContext): string {
 export function pitchImani(ctx: BriefContext): string {
   return [
     `Open on ${ctx.cast.visual}. No logo. No greeting.`,
-    `The hook is on screen before a half-second is gone: "${ctx.hookText}" I have it timed at 420ms, text plus the object, not a speech.`,
+    `The hook is the first line, on screen before a half-second is gone: "${ctx.hookText}" I have it timed at 420ms, with ${ctx.sceneDollar} burned in. Not a speech. Not a greeting.`,
     `Then ${ctx.cast.name}, ${ctx.cast.role} in ${ctx.cast.city}, says the pain in one line: "${ctx.pain}"`,
+    `We hold ${ctx.durationSeconds}s, inside 15–45, and end by asking them to comment ${ctx.commentKeyword}.`,
     `Goal on the brief: ${ctx.goal}`,
     "I am not promising this travels. I am promising the first frame is a problem someone already has.",
   ].join(" ");
@@ -47,8 +56,9 @@ export function pitchImani(ctx: BriefContext): string {
 
 export function pitchMarcus(ctx: BriefContext): string {
   return [
+    `One recurring character: ${ctx.cast.name}. We do not add a second lead to explain the theme.`,
     `${ctx.cast.name} wants ${ctx.cast.want}. The contradiction is the scene: ${ctx.cast.contradiction}.`,
-    `We stay in ${ctx.cast.city}. We do not cut to a street to prove anything.`,
+    `We stay in ${ctx.cast.city}. We do not cut to a street to prove anything. What we're not is a stereotyped or degrading portrayal.`,
     `Avoid: ${ctx.cast.avoid.join("; ")}.`,
     `If the culture desk flinched at the brief, the flinch wins. We shoot the job and the paper, not the wording that got stopped.`,
     "My pitch loses to Imani's if the hook is really at 420ms. I will not trade character for a colder open.",
@@ -90,11 +100,11 @@ export function voteJune(): string {
 }
 
 export function lockLine(ctx: BriefContext, winner: string, tally: string): string {
-  return `Locked around ${winner}. Tally: ${tally}. We shoot the hook at 420ms ("${ctx.hookText}"), pain first, ${ctx.cast.name} stays a ${ctx.cast.role} in ${ctx.cast.city}, and the only general money sentence keeps its source. Scene figures stay hypothetical. I am not calling this viral. I am calling it ready to face the gate.`;
+  return `Locked around ${winner}. Tally: ${tally}. We shoot the hook as the first line at 420ms ("${ctx.hookText}"), ${ctx.sceneDollar} on screen, one character (${ctx.cast.name}, ${ctx.cast.role} in ${ctx.cast.city}), ${ctx.durationSeconds}s, and we end on comment ${ctx.commentKeyword}. The only general money sentence keeps its source. The scene figure stays hypothetical. I am not calling this viral. I am calling it ready to face the gate.`;
 }
 
 export function bibleNote(ctx: BriefContext): string {
-  return `Bible locked for ${ctx.cast.name}. Later desks do not change the job, the city, or the avoid-list. Sensitivity notes are part of the canon, not a footnote.`;
+  return `Bible locked for one recurring character, ${ctx.cast.name}. Later desks do not add a second lead, change the job, the city, or the avoid-list. ${ctx.sceneDollar} on the paper stays a hypothetical. What we're not: a stereotyped or degrading portrayal. Sensitivity notes are part of the canon, not a footnote.`;
 }
 
 export function financeBody(ctx: BriefContext): string {
